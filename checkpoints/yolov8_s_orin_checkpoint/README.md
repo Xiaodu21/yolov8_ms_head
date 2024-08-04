@@ -1,0 +1,2 @@
+## 该目录下存放yolov8_s预训练300epoch原始的checkpoint文件
+文件名是yolov8_s_syncbn_fast_8xb16-500e_coco_20230117_180101-5aa5f0f1.pth

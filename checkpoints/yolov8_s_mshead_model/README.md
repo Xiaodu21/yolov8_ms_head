@@ -1,0 +1,2 @@
+## 该目录下存放我们的模型权重参数
+文件名是yolov8_s_mshead_last_model.pth
