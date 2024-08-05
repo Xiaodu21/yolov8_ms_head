@@ -1,9 +1,9 @@
 _base_ = [
-    '../../_base_/datasets/dota_rr.py', '../../_base_/schedules/schedule_1x.py',
+    '../../_base_/datasets/dota.py', '../../_base_/schedules/schedule_1x.py',
     '../../_base_/default_runtime.py'
 ]
 train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=12, val_interval=12)
-load_from='./checkpoints/yolov8_orin/yolov8_s_syncbn_fast_8xb16-500e_coco_20230117_180101-5aa5f0f1.pth'
+load_from='./checkpoints/yolov8_s_orin_pretrain/yolov8_s_syncbn_fast_8xb16-500e_coco_20230117_180101-5aa5f0f1.pth'
 angle_version = 'le90'
 model = dict(
     type='RefineSingleStageDetector',
