@@ -15,7 +15,7 @@ env_cfg = dict(
     mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
 file_client_args = dict(backend='disk')
 launcher = 'none'
-load_from = '/home/datassd_2T/lhy_temperary/First_Ablation_Experiment/checkpoints/yolov8/yolov8_s_syncbn_fast_8xb16-500e_coco_20230117_180101-5aa5f0f1.pth'
+load_from = '../checkpoints/yolov8_s_orin_pretrain/yolov8_s_syncbn_fast_8xb16-500e_coco_20230117_180101-5aa5f0f1.pth'
 log_level = 'INFO'
 log_processor = dict(by_epoch=True, type='LogProcessor', window_size=50)
 model = dict(
@@ -235,49 +235,6 @@ param_scheduler = [
 ]
 resume = False
 test_cfg = dict(type='TestLoop')
-test_dataloader = dict(
-    batch_size=1,
-    dataset=dict(
-        ann_file='trainval/annfiles/',
-        data_prefix=dict(img_path='trainval/images/'),
-        data_root='../data/',
-        img_shape=(
-            1024,
-            1024,
-        ),
-        pipeline=[
-            dict(
-                file_client_args=dict(backend='disk'),
-                type='mmdet.LoadImageFromFile'),
-            dict(keep_ratio=True, scale=(
-                1024,
-                1024,
-            ), type='mmdet.Resize'),
-            dict(
-                box_type='qbox', type='mmdet.LoadAnnotations', with_bbox=True),
-            dict(
-                box_type_mapping=dict(gt_bboxes='rbox'),
-                type='ConvertBoxType'),
-            dict(
-                meta_keys=(
-                    'img_id',
-                    'img_path',
-                    'ori_shape',
-                    'img_shape',
-                    'scale_factor',
-                ),
-                type='mmdet.PackDetInputs'),
-        ],
-        test_mode=True,
-        type='DOTADataset'),
-    drop_last=False,
-    num_workers=2,
-    persistent_workers=True,
-    sampler=dict(shuffle=False, type='DefaultSampler'))
-test_evaluator = dict(
-    metric='mAP',
-    outfile_prefix='./work_dirs/dota/s2anet_le90_Task1',
-    type='DOTAMetric')
 test_pipeline = [
     dict(
         file_client_args=dict(backend='disk'), type='mmdet.LoadImageFromFile'),
@@ -295,6 +252,28 @@ test_pipeline = [
         ),
         type='mmdet.PackDetInputs'),
 ]
+test_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        ann_file='trainval/annfiles/',
+        data_prefix=dict(img_path='trainval/images/'),
+        data_root='../data/',
+        img_shape=(
+            1024,
+            1024,
+        ),
+        pipeline=test_pipeline,
+        test_mode=True,
+        type='DOTADataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(
+     type='DOTAMetric',
+     format_only=True,
+     merge_patches=True,
+     outfile_prefix='./work_dirs/dota/Task1')
 train_cfg = dict(max_epochs=12, type='EpochBasedTrainLoop', val_interval=12)
 train_dataloader = dict(
     batch_sampler=None,
@@ -423,4 +402,4 @@ visualizer = dict(
     vis_backends=[
         dict(type='LocalVisBackend'),
     ])
-work_dir = '/home/datassd_2T/lhy_temperary/total_work_result/s2anet_yolo_simple_adamw_result/'
+work_dir = '../work_dirs'
